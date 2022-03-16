@@ -12,3 +12,9 @@ Styling
 Podsvetka VScode
 
 user = from user collection
+
+sideBar add to Main Layout?
+
+savedPosts collection change to only ID, the rest get from posts collection
+
+footer - make with MUI to be able to change theme color

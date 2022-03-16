@@ -6,13 +6,42 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { auth, db } from "../../config/fire-config";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 export const MainProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [photo, setPhoto] = useState("");
     const [currentUser, setCurrentUser] = useState(null);
-
+    
+    const toggleFavorite = (post) => {
+        const updateSavedPosts = (savedPosts) => {
+            updateDoc(doc(db, "users", currentUser.uid), {
+                savedPosts,
+            });
+            setCurrentUser({ ...currentUser, savedPosts });
+        };
+        const liked = currentUser.savedPosts.map((item) => item.postId).includes(post.id);
+        if (liked) {
+            //delete post form savedPost collection for current user
+            const newSavedPosts = [...(currentUser.savedPosts || [])];
+            const postIndex = newSavedPosts.findIndex((nextPost) => {
+                return nextPost.postId === post.id;
+            });
+            newSavedPosts.splice(postIndex, 1);
+            updateSavedPosts(newSavedPosts);
+        } else {
+            const newSavedPosts = [...(user.savedPosts || [])];
+            newSavedPosts.push({
+                postId: post.id,
+                postDate: post.postDate,
+                imageUrls: post.imageUrls[0],
+                price: post.price,
+                title: post.title,
+                zip: post.zip
+            });
+            updateSavedPosts(newSavedPosts);
+        }
+    };
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -63,7 +92,9 @@ export const MainProvider = ({ children }) => {
 
     const value = {
         currentUser: currentUser,
-        photo: photo
+        photo: photo,
+        toggleFavorite: toggleFavorite,
+        favorites: currentUser?.savedPosts.map((item) => item.postId) || false
     };
     return (
         <MainContext.Provider value={value}>

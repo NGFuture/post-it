@@ -4,23 +4,24 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import SignoutModal from "../../pages/signIn/SignoutModal";
 import { auth, db } from "../../config/fire-config";
-import { onAuthStateChanged } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import Logo from "./Logo";
 import Link from "next/link";
 import { useMainContext } from "@/components/context/MainContext";
 
+
 const NavBar = () => {
-  
+
   const [loggedIn, setLoggedIn] = useState(false);
   const [signoutModal, setSignoutModal] = useState(false);
 
   const router = useRouter();
   const routeQuery = router.asPath
 
-  const {currentUser} = useMainContext();
+  const { currentUser } = useMainContext();
   console.log(currentUser);
-  
+
 
   const toggleSignOutModal = () => setSignoutModal(!signoutModal);
   const reload = () => window.location.reload();
@@ -51,36 +52,39 @@ const NavBar = () => {
               }}
             />
           ) : (
+              <FaUserCircle
+                style={{
+                  width: "auto",
+                  height: "50px",
+                  fill: "#ef9d06",
+                  marginBottom: "0",
+                }}
+              />
+            )
+        ) : (
             <FaUserCircle
               style={{
                 width: "auto",
                 height: "50px",
-                fill: "#ef9d06",
                 marginBottom: "0",
+                fill: "#afafaf",
               }}
             />
-          )
-        ) : (
-          <FaUserCircle
-            style={{
-              width: "auto",
-              height: "50px",
-              marginBottom: "0",
-              fill: "#afafaf",
-            }}
-          />
-        )}
+          )}
         <div className={style.ProfileDiv}>
           <ul className={style.ProfileUl}>
             <li
               className={style.SignIn}
               onClick={() => {
-                router.push({
-                    pathname: "/signIn/SignIn",
-                    query: {
-                      routeTo: routeQuery} ,
-                    })
-                  }}
+                // router.push({
+                //     pathname: "/signIn/SignIn",
+                //     query: {
+                //       routeTo: routeQuery} ,
+                //     })
+
+                const provider = new GoogleAuthProvider();
+                signInWithPopup(auth, provider)
+              }}
               style={{
                 display: currentUser ? "none" : "block",
                 color: "#008000",
@@ -89,7 +93,10 @@ const NavBar = () => {
               Sign In
             </li>
             <li
-              onClick={toggleSignOutModal}
+              onClick={
+                toggleSignOutModal
+
+              }
               style={{
                 display: currentUser ? "block" : "none",
                 color: "#D50005",
@@ -103,11 +110,11 @@ const NavBar = () => {
                   currentUser
                     ? `/userProfilePage/${currentUser.uid}`
                     : {
-                        pathname: "/signIn/SignIn",
-                        query: {
-                          routeBack: `/userProfilePage/`,
-                        },
-                      }
+                      pathname: "/signIn/SignIn",
+                      query: {
+                        routeBack: `/userProfilePage/`,
+                      },
+                    }
                 }
               >
                 <span>My Profile</span>

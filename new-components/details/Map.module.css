@@ -1,0 +1,25 @@
+.mapContainer {
+    width: 100%;
+    height: 400px;
+  
+  }
+  
+      /*  landscape mobile */
+      @media (min-width:768px) {
+  
+      }
+      
+      /* tablet, */
+      @media (min-width:1024px) {
+      
+      }
+      
+      /* desktop */
+      @media (min-width: 1280px) {
+        .mapContainer {
+          width: 100%;
+          height: 300px;
+      
+        }
+      
+        }

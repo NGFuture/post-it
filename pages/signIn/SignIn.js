@@ -61,11 +61,13 @@ const SignInPage = ({ }) => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
+        console.log(result);
+        // GoogleAuthProvider.credentialFromResult(result);
+        // const credential = GoogleAuthProvider.credentialFromResult(result);
+        // const token = credential.accessToken;
       }).then(() => {
-        onAuthStateChanged(auth, (user) =>
-          routing(user))
+        // onAuthStateChanged(auth, (user) =>
+        //   routing(user))
       })
       .catch((error) => {
         const errorMessage = error.message;

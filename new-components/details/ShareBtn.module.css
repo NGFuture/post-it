@@ -1,0 +1,29 @@
+.btn {
+  margin-left: 10px;
+  padding-left: 10px;
+  margin-top: 10px;
+}
+
+.tooltip {
+  width: 90px;
+  height: 20px;
+  text-align: center;
+}
+
+
+  /*  landscape mobile */
+  @media (min-width:768px) {
+    .tooltip {
+      width: 100px;
+    }
+}
+
+/* tablet, */
+@media (min-width:1024px) {
+
+}
+
+/* desktop */
+@media (min-width: 1280px) {
+
+  }
