@@ -1,13 +1,12 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.css";
+import FavoritesList from "@/components/favorites/FavoritesList";
 // import PostsListContainer from "../components/PostsListContainer";
-import PostsListContainer from "@/components/postlist/PostsListContainer";
 
 
 const Home = () => {
   return (
     <div>
-      <PostsListContainer />
+      <FavoritesList />
     </div>
   );
 };

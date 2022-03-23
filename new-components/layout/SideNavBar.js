@@ -13,6 +13,7 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
+import { useMainContext } from "@/components/context/MainContext";
 
 const SideNavBar = ({
   setPosts,
@@ -40,6 +41,8 @@ const SideNavBar = ({
     ["Vehicles", "vehicles"],
     ["Others", "others"],
   ]);
+
+   const { favoritesList, favList, currentUser } = useMainContext()
 
   useEffect(async () => {
     const postsRef = collection(db, "posts");
@@ -80,7 +83,7 @@ const SideNavBar = ({
           orderBy(sortValue, sortType),
           where("userId", "==", queryCriteria.userID)
         );
-      }
+      } 
       onSnapshot(q, (snap) => {
         const queryList = snap.docs.map((doc) => ({
           id: doc.id,
@@ -89,22 +92,29 @@ const SideNavBar = ({
         setPosts(queryList);
       });
     } else if (queryCriteria.saved) {
-      const docRef = doc(db, "users", currentUserId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        if (docSnap.data().savedPosts) {
-          const savedArray = docSnap
-            .data()
-            .savedPosts.map((arr) => ({ id: arr.postId, ...arr }));
-          setPosts(savedArray);
-        } else {
-          setPosts([]);
-        }
-      } else {
-        router.push("/signIn/SignIn");
-      }
+      favoritesList(currentUser);
+
+      // const docRef = doc(db, "users", currentUserId);
+      // const docSnap = await getDoc(docRef);
+      // if (docSnap.exists()) {
+      //   if (docSnap.data().savedPosts) {
+      //     const savedArray = docSnap
+      //       .data()
+      //       .savedPosts.map((arr) => ({ id: arr.postId, ...arr }));
+      //     setPosts(savedArray);
+      //   } else {
+      //     setPosts([]);
+      //   }
+      // } else {
+      //   router.push("/signIn/SignIn");
+      // }
     }
   }, [queryCriteria, sortValue, sortType]);
+  
+  useEffect(()=>{
+    if (!favList.length) return
+    setPosts(favList);
+  },[favList]);
 
   return (
     <span className={style.Menu}>

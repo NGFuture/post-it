@@ -1,0 +1,43 @@
+.mainDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* width: 26em; */
+  flex-basis: 200px;
+  flex-shrink: 1;
+  flex-grow: 1;
+}
+
+.DisplayImage {
+  width: auto;
+  transition: transform 0.2s;
+  max-height: 300px;
+  min-height: 270px;
+  padding-top: 30px;
+}
+
+.DisplayImage:hover {
+  transform: scale(1.15);
+}
+
+.userImgDiv {
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+
+.userImage {
+  width: auto;
+  height: 200px;
+}
+
+.userImage:hover {
+  cursor: pointer;
+  opacity: 0.3;
+}
+
+.userImageBtn {
+  display: flex;
+  justify-content: space-evenly;
+}

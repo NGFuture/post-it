@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTheme } from '@mui/material/styles';
-// import style from '../styles/Home.module.css'
-const style = {}
+import styles from './Footer.module.css'
+
 
 
 
@@ -11,10 +11,11 @@ function Footer() {
     const date = new Date()
     const year = date.getFullYear()
   return (
-    <footer className={style.footer} style={{
+    <footer className={styles.footer} style={{
       backgroundColor: theme.palette.primary.main,
     }}>
-        <div className={style.footerDiv}> Copyright &copy; {year} </div>
+        <div> Copyright &copy; {year} | &nbsp;</div>
+        <a  href="https://github.com/NGFuture/post-it/tree/DisplayPosts_2">GitHub</a>
 
     </footer>
   )

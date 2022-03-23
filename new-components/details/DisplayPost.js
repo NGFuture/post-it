@@ -12,10 +12,6 @@ import PhotoGallery from "./PhotoGallery";
 import Title from "./Title";
 import Popup from "@/components/popup/Popup";
 import SignInPage from "../../pages/signIn/SignIn";
-
-
-// import { onAuthStateChanged } from "firebase/auth";
-
 import {
     doc,
     onSnapshot,
@@ -24,9 +20,6 @@ import {
 import { getDatabase, ref, set } from "firebase/database";
 import { db, storage } from "../../config/fire-config";
 import { auth } from "../../config/fire-config";
-
-
-
 
 
 export default function DisplayPost({ post }) {

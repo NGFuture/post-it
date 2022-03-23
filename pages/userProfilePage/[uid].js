@@ -21,26 +21,37 @@ import {
 } from "@material-ui/core";
 import PasswordIcon from "@mui/icons-material/Password";
 import { useRouter } from "next/router";
-import { onAuthStateChanged } from "firebase/auth";
-import ProfileImage from "../../components/UserProfilePage/ProfileImage";
+// import { onAuthStateChanged } from "firebase/auth";
+import ProfileImage from "@/components/UserProfilePage/ProfileImage";
+import { useMainContext } from "@/components/context/MainContext";
 
 function UserProfile() {
   const router = useRouter();
   const uid = router && router.query.uid;
+  const { currentUser } = useMainContext();
 
-  const [user, setUser] = useState("");
+
+  useEffect(()=>{
+    if (currentUser === null || currentUser.uid !== uid) {
+      router.push("/")
+    }
+  },[])
+
+
+  
+  // const [user, setUser] = useState("");
   const [postCount, setPostCount] = useState([]);
 
   useEffect(async () => {
     if (!uid) return false;
-    const postsRef = collection(db, "posts");
-    const docRef = doc(db, "users", uid);
     let q;
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const userData = { ...docSnap.data(), id: docSnap.id };
-      setUser(userData);
-    }
+    const postsRef = collection(db, "posts");
+    // const docRef = doc(db, "users", uid);
+    // const docSnap = await getDoc(docRef);
+    // if (docSnap.exists()) {
+    //   const userData = { ...docSnap.data(), id: docSnap.id };
+    //   setUser(userData);
+    // }
 
     q = query(postsRef, where("userId", "==", uid));
     onSnapshot(q, (snap) => {
@@ -53,14 +64,18 @@ function UserProfile() {
   }, [uid]);
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => (user ? "" : router.push("/")));
-  });
+    if (currentUser === null) (router.push("/"))
+  }, [currentUser]);
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, (user) => (user ? "" : router.push("/")));
+  // });
+  if (!currentUser) {return "Loading..."}
   return (
     <div className={style.UserProfileContainer}>
       <main className={style.UPmainParent}>
         <div className={style.DataBoxChild}>
           <>
-            <ProfileImage photo={user.photo} />
+            <ProfileImage photo={currentUser.photo} />
           </>
           <>
             <div className={style.DisplayCard}>
@@ -81,7 +96,7 @@ function UserProfile() {
                           fontSize="25px"
                           align="center"
                         >
-                          {user.name}
+                          {currentUser.name}
                         </Typography>
                       </TableCell>
                     </TableRow>
@@ -100,12 +115,12 @@ function UserProfile() {
                         }}
                       >
                         <Typography variant="body1" gutterBottom>
-                          {user.email}
+                          {currentUser.email}
                         </Typography>
                       </TableCell>
                     </TableRow>
 
-                    {user.provider === "Post-It Signup" ? (
+                    {currentUser.provider === "Post-It Signup" ? (
                       <TableRow>
                         <TableCell
                           colSpan={2}
@@ -142,7 +157,7 @@ function UserProfile() {
                         sx={{ borderBottom: "none" }}
                       >
                         <Typography variant="body1" gutterBottom>
-                          Saved Post : {user.savedPosts?.length}
+                          Saved Post : {currentUser.savedPosts?.length}
                         </Typography>
                       </TableCell>
 
@@ -168,7 +183,7 @@ function UserProfile() {
                       >
                         <Typography variant="body1" gutterBottom>
                           Account since :{" "}
-                          {user.accountCreatedDate
+                          {currentUser.accountCreatedDate
                             ?.toDate()
                             .toLocaleDateString()}
                         </Typography>

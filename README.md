@@ -1,5 +1,3 @@
-
-
 ## Getting Started
 
 First, run the development server:
@@ -12,53 +10,32 @@ yarn dev
 Open [http://localhost:3000]
 
 
-- You can check out (https://post-it-tau.vercel.app/). Your feedback and contributions are welcome!.
+- You can check out (https://serene-tesla-f343da.netlify.app/). Your feedback and contributions are welcome!.
 
 
 ## General Information:
 
-Team Name: Post-It
-Team Members: 
-Omar Alareeki         | https://github.com/OmarAlareeki
-Munir Nuristani.      | https://github.com/MunirNuristani
-Vaidehi Sapre         | https://github.com/CodergirlVS
-Natalia Grigoryeva    | https://github.com/NGFuture
+Application: Post-It
+Connect buyers and sellers in friendly easy steps.
 
 ## Project Overview and Concept
-Drawing inspiration from the UX of apps like OfferUp and LetGo, 
-Post-It aims to give the user a way to find and sell goods.
+Drawing inspiration from the UX of apps like OfferUp. 
+
+## Versions, authors
+Version 3 (creation March 2022 - current time)
+Available: https://github.com/NGFuture/post-it/tree/DisplayPosts_2
+by Natalia Grigoryeva | https://github.com/NGFuture
+
+- refactored database structure so user have always the latest data about saved to favorite posts
+- refactored MainLayout to have better control on elements position
+- refactored User Auth - moved to MainProvider so user info was available for all components which need it
+- refactiring Footer and other elements to use MUI theme for easier changing colors and styles
 
 
-- The Post-It Project’s mission is to enable a hyper-local gift economy, 
-in order to curb needless consumption, engender human connection, and promote sustainability.
+Versions 1 and 2 (January 2022- February 2022)
+by team:
+Natalia Grigoryeva, Vaidehi Sapre, Munir Nuristani, Omar Alareeki 
 
-- Our app contributes to this mission by making the experience of offering and accepting goods 
-as safe and friction-free as possible.
-
-## Minimum Viable Product:
-
- - User stories:
- 
-   Since this is essentially a two-sided marketplace, we have two User personas,
-   Listers (the “sellers”) and Searchers (“buyers”). (An interesting wrinkle here is that 
-   in some sense the Listers are themselves receiving a service—probing that may bear fruit.)
-
-    As a Lister, In order to keep my life clutter-free as easily as possible, I want to snap a photo of 
-    things I want to be rid of and have someone come pick it up to take it away.
-
-    As a Lister, I want to provides my services to the community as a way to hone my skills, connect with 
-    people as well as giving back to the community.
-
-    As a Searcher, In order to fill a specific need, I want to easily see listings for free items and 
-    details relevant to making a decision to invest the time into picking it up.
-
-
-## Stretch Goals (rough priority ordering)
-
-    Views count for a post
-    Chat between users
-    Video upload for a post
-    Adding expiration period for a post
 
  ## Frameworks and Libraries
 
@@ -69,32 +46,17 @@ as safe and friction-free as possible.
     react-leaflet
     Bootstrap
     TinyMCE
+    React Bootstrap
+    material-ui
     
    UI/UX:
 
     Figma - MockUI
-    npm
-    React Bootstrap
-    material-ui
 
   Testing:
 
-    Jest
-    
- Project Management;
-  
-    Trello
+    Jest   
     
  Database:
  
    Firebase@ 9.0
-
-## Deploy on Vercel
-     Check out live site
-https://post-it-tau.vercel.app/
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform]
-(https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) 
-from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

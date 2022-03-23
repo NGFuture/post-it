@@ -6,13 +6,20 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { auth, db } from "../../config/fire-config";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, onSnapshot, query, where, collection, documentId} from "firebase/firestore";
+// import admin from "firebase-admin";
+// import { FieldPath } from '@google-cloud/firestore'
+
 
 export const MainProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [photo, setPhoto] = useState("");
     const [currentUser, setCurrentUser] = useState(null);
-    
+    const [favList, setFavList] = useState([]);
+
+
+
+
     const toggleFavorite = (post) => {
         const updateSavedPosts = (savedPosts) => {
             updateDoc(doc(db, "users", currentUser.uid), {
@@ -20,25 +27,26 @@ export const MainProvider = ({ children }) => {
             });
             setCurrentUser({ ...currentUser, savedPosts });
         };
-        const liked = currentUser.savedPosts.map((item) => item.postId).includes(post.id);
+        const liked = currentUser.savedPosts.includes(post.id);
         if (liked) {
             //delete post form savedPost collection for current user
             const newSavedPosts = [...(currentUser.savedPosts || [])];
             const postIndex = newSavedPosts.findIndex((nextPost) => {
-                return nextPost.postId === post.id;
+                return nextPost === post.id;
             });
             newSavedPosts.splice(postIndex, 1);
             updateSavedPosts(newSavedPosts);
         } else {
-            const newSavedPosts = [...(user.savedPosts || [])];
-            newSavedPosts.push({
-                postId: post.id,
-                postDate: post.postDate,
-                imageUrls: post.imageUrls[0],
-                price: post.price,
-                title: post.title,
-                zip: post.zip
-            });
+            const newSavedPosts = [...(currentUser.savedPosts || [])];
+            newSavedPosts.push(post.id);
+            // newSavedPosts.push({
+            //     postId: post.id,
+            //     postDate: post.postDate,
+            //     imageUrls: post.imageUrls[0],
+            //     price: post.price,
+            //     title: post.title,
+            //     zip: post.zip
+            // });
             updateSavedPosts(newSavedPosts);
         }
     };
@@ -64,8 +72,8 @@ export const MainProvider = ({ children }) => {
                 //     setPhoto(docSnap.data().photo);
                 // } 
                 setCurrentUser(docSnap.data())
-            }  else {
-                const currentUser = { 
+            } else {
+                const currentUser = {
                     accountCreatedDate: new Date(),
                     email: user.email,
                     name: user.displayName,
@@ -74,7 +82,8 @@ export const MainProvider = ({ children }) => {
                     provider: `Login-${user.providerData[0].providerId}`,
                     savedPosts: [],
                     uid: user.uid,
-                    zipCode: 0,}
+                    zipCode: 0,
+                }
                 setCurrentUser(currentUser);
                 await setDoc(doc(db, "users", user.uid), currentUser);
             }
@@ -85,8 +94,24 @@ export const MainProvider = ({ children }) => {
 
     }, [user])
 
-    
-                
+
+    const favoritesList = (userFavList) => {
+        const postsRef = collection(db, "posts");
+        const q = query(
+            postsRef,
+            where(documentId(), "in", userFavList.savedPosts)
+        );
+        onSnapshot(q, (snap) => {
+            const queryList = snap.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setFavList(queryList);
+        });
+
+    };
+
+
 
 
 
@@ -94,7 +119,9 @@ export const MainProvider = ({ children }) => {
         currentUser: currentUser,
         photo: photo,
         toggleFavorite: toggleFavorite,
-        favorites: currentUser?.savedPosts.map((item) => item.postId) || false
+        favorites: currentUser ?.savedPosts || [],
+        favoritesList: favoritesList,
+        favList: favList
     };
     return (
         <MainContext.Provider value={value}>
