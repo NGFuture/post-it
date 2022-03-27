@@ -19,7 +19,7 @@ const CardsContainer = ({
         <div key={post.id}>
           <Card className={style.Cards}>
             <Card.Link
-              href={`/details/${post.id}`}
+              href={`/displaypage/${post.id}`}
               style={{
                 color: "black",
                 textDecoration: "none",

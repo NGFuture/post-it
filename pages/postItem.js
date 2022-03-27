@@ -136,7 +136,7 @@ const handleSubmit = async (event) => {
         setPhoneNumber(undefined);
         setProgress("getUpload");
         console.log("document written: ", postId);
-        router.push(`/details/${postId}`)
+        router.push(`/displaypage/${postId}`)
       })
       .catch((error) => {
         console.error("Error adding Document: ", error);

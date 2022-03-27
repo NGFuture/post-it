@@ -30,6 +30,7 @@ by Natalia Grigoryeva | https://github.com/NGFuture
 - refactored MainLayout to have better control on elements position
 - refactored User Auth - moved to MainProvider so user info was available for all components which need it
 - refactiring Footer and other elements to use MUI theme for easier changing colors and styles
+- signIn changed to PopUp instead of routing user to separate page for better UX experience
 
 
 Versions 1 and 2 (January 2022- February 2022)
