@@ -59,20 +59,7 @@ const SignInPage = ({ }) => {
 
   const googleLogin = () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log(result);
-        // GoogleAuthProvider.credentialFromResult(result);
-        // const credential = GoogleAuthProvider.credentialFromResult(result);
-        // const token = credential.accessToken;
-      }).then(() => {
-        // onAuthStateChanged(auth, (user) =>
-        //   routing(user))
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.log("sorry, try again. ", errorMessage);
-      });
+    signInWithPopup(auth, provider);
   };
   const facebookLogin = () => {
     const provider = new FacebookAuthProvider();

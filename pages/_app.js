@@ -6,7 +6,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider } from "@emotion/react";
 import theme from "@/components/mui/theme";
-import createEmotionCache from "../components/mui/createEmotionCache";
+import createEmotionCache from "@/components/mui/createEmotionCache";
 // import MainLayout from "../components/mainLayout";
 import MainLayout from "@/components/layout/MainLayout";
 

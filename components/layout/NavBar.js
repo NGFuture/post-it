@@ -19,7 +19,7 @@ const NavBar = () => {
   const router = useRouter();
   const routeQuery = router.asPath
 
-  const { currentUser } = useMainContext();
+  const { currentUser, setLoginAlert } = useMainContext();
   console.log(currentUser);
 
 
@@ -81,9 +81,9 @@ const NavBar = () => {
                 //     query: {
                 //       routeTo: routeQuery} ,
                 //     })
-
-                const provider = new GoogleAuthProvider();
-                signInWithPopup(auth, provider)
+                setLoginAlert(true);
+                // const provider = new GoogleAuthProvider();
+                // signInWithPopup(auth, provider)
               }}
               style={{
                 display: currentUser ? "none" : "block",

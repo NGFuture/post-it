@@ -16,8 +16,15 @@ export const MainProvider = ({ children }) => {
     const [photo, setPhoto] = useState("");
     const [currentUser, setCurrentUser] = useState(null);
     const [favList, setFavList] = useState([]);
+    const [loginAlert, setLoginAlert] = useState(false);
+    const router = useRouter();
 
-
+    const openLoginPopup = () => {
+        setLoginAlert(true);
+        if (!router.query.routeTo) {
+            router.push(router.asPath+`?routeTo=${router.asPath}`)
+        }
+    }
 
 
     const toggleFavorite = (post) => {
@@ -50,6 +57,24 @@ export const MainProvider = ({ children }) => {
             updateSavedPosts(newSavedPosts);
         }
     };
+
+    const favoritesList = (userFavList) => {
+        const postsRef = collection(db, "posts");
+        const q = query(
+            postsRef,
+            where(documentId(), "in", userFavList.savedPosts)
+        );
+        onSnapshot(q, (snap) => {
+            const queryList = snap.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+            }));
+            setFavList(queryList);
+        });
+
+    };
+
+
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -94,25 +119,11 @@ export const MainProvider = ({ children }) => {
 
     }, [user])
 
-
-    const favoritesList = (userFavList) => {
-        const postsRef = collection(db, "posts");
-        const q = query(
-            postsRef,
-            where(documentId(), "in", userFavList.savedPosts)
-        );
-        onSnapshot(q, (snap) => {
-            const queryList = snap.docs.map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-            setFavList(queryList);
-        });
-
-    };
-
-
-
+    useEffect(() => {
+        if (currentUser) {
+            setLoginAlert(false) 
+        }
+    }, [currentUser]);
 
 
     const value = {
@@ -121,7 +132,10 @@ export const MainProvider = ({ children }) => {
         toggleFavorite: toggleFavorite,
         favorites: currentUser ?.savedPosts || [],
         favoritesList: favoritesList,
-        favList: favList
+        favList: favList,
+        loginAlert: loginAlert,
+        setLoginAlert,
+        openLoginPopup,
     };
     return (
         <MainContext.Provider value={value}>

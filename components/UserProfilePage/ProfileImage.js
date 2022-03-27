@@ -15,23 +15,25 @@ import {
 import { doc, updateDoc } from "firebase/firestore";
 import { IconButton, Input, FormControl } from "@material-ui/core";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import { onAuthStateChanged } from "firebase/auth";
+import { useMainContext } from "@/components/context/MainContext";
+// import { onAuthStateChanged } from "firebase/auth";
 
 const ProfileImage = ({ photo }) => {
-  const [currentUser, setCurrentUser] = useState("");
+  const { currentUser } = useMainContext();
+  // const [currentUser, setCurrentUser] = useState("");
   const [displayUrl, setDisplayUrl] = useState("");
   const [progress, setProgress] = useState("getUpload");
   const [showIcons, setShowIcons] = useState(false);
 
-  useEffect(async () => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setCurrentUser(user);
-      } else {
-        setCurrentUser("");
-      }
-    });
-  }, []);
+  // useEffect(async () => {
+  //   onAuthStateChanged(auth, (user) => {
+  //     if (user) {
+  //       setCurrentUser(user);
+  //     } else {
+  //       setCurrentUser("");
+  //     }
+  //   });
+  // }, []);
 
   const handleImageUpload = (e) => {
     const userImage = e.target.files[0];

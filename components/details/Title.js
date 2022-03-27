@@ -7,8 +7,8 @@ import { useMainContext } from "@/components/context/MainContext";
 // import EditPostDP from "./EditPostDP";
 
 
-export default function Title({ post, openLoginPopup }) {
-    const { currentUser, toggleFavorite, favorites } = useMainContext();
+export default function Title({ post }) {
+    const { currentUser, toggleFavorite, favorites, openLoginPopup } = useMainContext();
     const liked = favorites.includes(post.id)
     const handleLikeClick = () => {
         if (!currentUser) {
