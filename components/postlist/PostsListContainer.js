@@ -1,20 +1,23 @@
 import { useEffect, useState } from "react";
-import { auth } from "../config/fire-config";
 import "bootstrap/dist/css/bootstrap.css";
 import CardsContainer from "./CardsContainer.js";
 import SearchPosts from "./SearchPosts.js";
-import SideNavBar from "./NavBar/SideNavBar";
-import AlertWrapper from "../utils/AlertWrapper";
-import style from "../styles/Home.module.css";
-import { onAuthStateChanged } from "firebase/auth";
+import SideNavBar from "@/components/layout/SideNavBar";
+import AlertWrapper from "../../utils/AlertWrapper";
+import style from "../../styles/Home.module.css";
 import { Button } from "react-bootstrap";
 import { Rings } from "react-loader-spinner";
 import Sort from "./Sort";
 import { useRouter } from "next/router";
+import { useMainContext } from "@/components/context/MainContext";
+
+
+// import { auth } from "../../config/fire-config";
+// import { onAuthStateChanged } from "firebase/auth";
 
 const PostsListContainer = () => {
   const [posts, setPosts] = useState(["Loading..."]);
-  const [currUser, setCurrUser] = useState([]);
+  // const [currUser, setCurrUser] = useState([]);
   const [deleteBtnStatus, setDeleteBtnStatus] = useState(false);
   const [sortValue, setSortValue] = useState("postDate");
   const [sortType, setSortType] = useState("desc");
@@ -29,16 +32,18 @@ const PostsListContainer = () => {
     setShowAlert(false);
   };
 
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) =>
-      user ? setCurrUser(user) : setCurrUser("")
-    );
-  }, []);
+  const { currentUser } = useMainContext();
 
-  const currentUserId = currUser.uid;
+  // useEffect(() => {
+  //   onAuthStateChanged(auth, (user) =>
+  //     user ? setCurrUser(user) : setCurrUser("")
+  //   );
+  // }, []);
+
+  const currentUserId = currentUser?.uid;
 
   const postNewItem = () => {
-    currUser
+    currentUser
       ? router.push("/postItem")
       : router.push({
           pathname: "/signIn/SignIn",

@@ -1,10 +1,10 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-import style from "../styles/Home.module.css";
-import { formatDay } from "../utils/DaysAgo";
-import DeletePost from "../utils/DeletePosts";
-import ZipToCity from "../utils/ZipToCity";
+import style from "../../styles/Home.module.css";
+import { formatDay } from "../../utils/DaysAgo";
+import DeletePost from "../../utils/DeletePosts";
+import ZipToCity from "../../utils/ZipToCity";
 import NumberFormat from "react-number-format";
 
 const CardsContainer = ({

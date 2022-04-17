@@ -11,13 +11,17 @@ import {
 import { getDatabase, ref, set } from "firebase/database";
 import { db, storage } from "../../config/fire-config";
 import DaysAgo, { formatDay } from "../../utils/DaysAgo";
+import ZipToCity from '../../utils/ZipToCity';
+import NumberFormat from 'react-number-format';
 import ShareBtn from "./ShareBtn"
 import Button from '@mui/material/Button';
-import NumberFormat from 'react-number-format';
-import ZipToCity from '../../utils/ZipToCity';
+import { useMainContext } from "@/components/context/MainContext";
 
-export default function Content({ post, openLoginPopup, currentUser }) {
 
+
+
+export default function Content({ post }) {
+  const { openLoginPopup, currentUser } = useMainContext();
   const [showContacts, setShowContacts] = useState(false);
 
   const handleContactClick = () => {

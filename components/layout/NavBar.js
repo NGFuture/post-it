@@ -1,56 +1,27 @@
-import style from "../../styles/NavBar.module.css";
+import style from "./NavBar.module.css";
 import { FaUserCircle } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import SignoutModal from "../../pages/signIn/SignoutModal";
 import { auth, db } from "../../config/fire-config";
-import { onAuthStateChanged } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import Logo from "./Logo";
 import Link from "next/link";
+import { useMainContext } from "@/components/context/MainContext";
+
 
 const NavBar = () => {
-  const [currentUser, setCurrentUser] = useState("");
+
   const [loggedIn, setLoggedIn] = useState(false);
   const [signoutModal, setSignoutModal] = useState(false);
-  const [photo, setPhoto] = useState("");
+
   const router = useRouter();
   const routeQuery = router.asPath
 
-  useEffect(() => {
-    async function authChange() {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          setCurrentUser(user);
-          setLoggedIn(true);
-        } else {
-          setCurrentUser("");
-        }
-      });
+  const { currentUser, setLoginAlert } = useMainContext();
+  console.log(currentUser);
 
-      if (currentUser) {
-        const docRef = doc(db, "users", currentUser.uid);
-        const docSnap = await getDoc(docRef);
-
-        if (docSnap.exists()) {
-          docSnap.data().photo ? setPhoto(docSnap.data().photo) : "";
-        } else {
-          await setDoc(doc(db, "users", currentUser.uid), {
-            accountCreatedDate: new Date(),
-            email: currentUser.email,
-            name: currentUser.displayName,
-            phoneNumber: currentUser.phoneNumber,
-            photo: currentUser.photoURL,
-            provider: `Login-${currentUser.providerData[0].providerId}`,
-            savedPosts: [],
-            uid: currentUser.uid,
-            zipCode: 0,
-          });
-        }
-      }
-    }
-    authChange();
-  }, [loggedIn]);
 
   const toggleSignOutModal = () => setSignoutModal(!signoutModal);
   const reload = () => window.location.reload();
@@ -63,8 +34,8 @@ const NavBar = () => {
       <div className={style.userIcon}>
         <p>
           Hi,
-          {currentUser.displayName
-            ? currentUser.displayName.split(" ")[0]
+          {currentUser
+            ? currentUser.name.split(" ")[0]
             : "there"}
           !
         </p>
@@ -81,36 +52,39 @@ const NavBar = () => {
               }}
             />
           ) : (
+              <FaUserCircle
+                style={{
+                  width: "auto",
+                  height: "50px",
+                  fill: "#ef9d06",
+                  marginBottom: "0",
+                }}
+              />
+            )
+        ) : (
             <FaUserCircle
               style={{
                 width: "auto",
                 height: "50px",
-                fill: "#ef9d06",
                 marginBottom: "0",
+                fill: "#afafaf",
               }}
             />
-          )
-        ) : (
-          <FaUserCircle
-            style={{
-              width: "auto",
-              height: "50px",
-              marginBottom: "0",
-              fill: "#afafaf",
-            }}
-          />
-        )}
+          )}
         <div className={style.ProfileDiv}>
           <ul className={style.ProfileUl}>
             <li
               className={style.SignIn}
               onClick={() => {
-                router.push({
-                    pathname: "/signIn/SignIn",
-                    query: {
-                      routeTo: routeQuery} ,
-                    })
-                  }}
+                // router.push({
+                //     pathname: "/signIn/SignIn",
+                //     query: {
+                //       routeTo: routeQuery} ,
+                //     })
+                setLoginAlert(true);
+                // const provider = new GoogleAuthProvider();
+                // signInWithPopup(auth, provider)
+              }}
               style={{
                 display: currentUser ? "none" : "block",
                 color: "#008000",
@@ -119,7 +93,10 @@ const NavBar = () => {
               Sign In
             </li>
             <li
-              onClick={toggleSignOutModal}
+              onClick={
+                toggleSignOutModal
+
+              }
               style={{
                 display: currentUser ? "block" : "none",
                 color: "#D50005",
@@ -128,20 +105,20 @@ const NavBar = () => {
               Sign Out
             </li>
             <li>
-              <Link
+              {!!currentUser && <Link
                 href={
                   currentUser
                     ? `/userProfilePage/${currentUser.uid}`
                     : {
-                        pathname: "/signIn/SignIn",
-                        query: {
-                          routeBack: `/userProfilePage/`,
-                        },
-                      }
+                      pathname: "/signIn/SignIn",
+                      query: {
+                        routeBack: `/userProfilePage/`,
+                      },
+                    }
                 }
               >
                 <span>My Profile</span>
-              </Link>
+              </Link>}
             </li>
           </ul>
         </div>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Style from "../styles/NavBar.module.css";
+import Style from "../../styles/NavBar.module.css";
 import { BsSearch } from "react-icons/bs";
 import { PropTypes } from "prop-types";
-import { db } from "../config/fire-config";
+import { db } from "../../config/fire-config";
 import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
 // import firebaseConfig from "../config/fire-config";
 // import { initializeApp } from "firebase/app";
